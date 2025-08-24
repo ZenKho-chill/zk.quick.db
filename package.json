@@ -1,0 +1,21 @@
+{
+  "name": "zk.quick.db",
+  "version": "1.0.0",
+  "description": "Thư viện database đơn giản hỗ trợ SQLite, PostgreSQL, MySQL, MongoDB, Cassandra với API thống nhất",
+  "main": "out/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "cassandra-driver": "^4.8.0",
+    "fs": "^0.0.1-security",
+    "mongoose": "^8.18.0",
+    "mysql2": "^3.14.3",
+    "pg": "^8.16.3",
+    "write-file-atomic": "^6.0.0"
+  }
+}

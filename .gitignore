@@ -1,0 +1,4 @@
+(# Ignore dependency directories and lockfile)
+node_modules/
+package-lock.json
+

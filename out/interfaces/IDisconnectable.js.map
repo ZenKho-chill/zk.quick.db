@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "IDisconnectable.js",
+  "sourceRoot": "",
+  "sources": [
+    "../../src/interfaces/IDisconnectable.ts"
+  ],
+  "names": [],
+  "mappings": ""
+}

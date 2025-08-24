@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql
+    ports:
+      -"${MYSQL_PORT}:${MYSQL_PORT}"
+    networks:
+      - testing-networks
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_RAMDOM_ROOT_PASSWORD: true
+  mongo:
+    image: mongo
+    ports:
+      -"${MONGO_PORT}:${MONGO_PORT}"
+    networks:
+      - testing-networks
+    environment:
+      - MONGO_INIT_ROOT_USERNAM=${MONGO_INIT_ROOT_USERNAME}
+      - MONGO_INIT_ROOT_PASSWORD=${MONGO_INIT_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+  pg:
+    image: postgres
+    ports:
+      -"${POSTGRESS_PORT}:${POSTGRESS_PORT}"
+    networks:
+      - testing-networks
+    environment:
+      - POSTGRESS_PASSWORD=${POSTGRESS_PASSWORD}
+      - POSTGRESS_USER=${POSTGRESS_USER}
+      - POSTGRESS_DB=${POSTGRESS_DB}
+  cassandra:
+    image: cassandra:5.0
+    ports:
+      -"${CASSANDRA_PORT}:${CASSANDRA_PORT}"
+    networks:
+      - testing-networks
+    environment:
+      - CASSANDRA_USER=${CASSANDRA_USER}
+      - CASSANDRA_PASSWORD=${CASSANDRA_PASSWORD}
+      - MAX_HEAP_SIZE=256M
+      - HEAP_NEWSIZE=100M
+    volumes:
+      - ./tests/cassandra.yaml:/etc/cassandra/cassandra.yaml
+networks:
+  testing-network:

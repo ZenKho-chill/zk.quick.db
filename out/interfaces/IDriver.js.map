@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "IDriver.js",
+  "sourceRoot": "",
+  "sources": [
+    "../../src/interfaces/IDriver.ts"
+  ],
+  "names": [],
+  "mappings": ""
+}
