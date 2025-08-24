@@ -3,13 +3,48 @@
   "version": "1.0.0",
   "description": "Thư viện database đơn giản hỗ trợ SQLite, PostgreSQL, MySQL, MongoDB, Cassandra với API thống nhất",
   "main": "out/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "types": "out/index.d.ts",
+  "engines": {
+    "node": ">=14.0.0"
   },
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "test:all": "jest --roots tests",
+    "test:integration": "jest --roots tests/integration",
+    "test:unit": "jest --roots tests/unit",
+    "test": "npm run test:unit",
+    "lint": "eslint --ext \".ts\" ./src",
+    "prettier": "prettier --write ./src",
+    "prettier:all": "prettier --write ./",
+    "docgen": "typedoc",
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf ./out",
+    "prepare": "npm run build"
+  },
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-angular": "19.8.1",
+    "@faker-js/faker": "10.0.0",
+    "@types/better-sqlite3": "7.6.13",
+    "@types/jest": "30.0.0",
+    "@types/lodash": "4.17.20",
+    "@types/pg": "8.15.5",
+    "@types/write-file-atomic": "4.0.3",
+    "@typescript-eslint/eslint-plugin": "8.40.0",
+    "@typescript-eslint/parser": "8.40.0",
+    "dotenv": "17.2.1",
+    "eslint": "9.34.0",
+    "eslint-config-prettier": "10.1.8",
+    "git-cliff": "2.10.0",
+    "jest": "30.0.5",
+    "lefthook": "1.12.3",
+    "prettier": "3.6.2",
+    "ts-jest": "29.4.1",
+    "typedoc": "0.28.10",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
     "better-sqlite3": "^12.2.0",
     "cassandra-driver": "^4.8.0",
     "fs": "^0.0.1-security",
@@ -17,5 +52,60 @@
     "mysql2": "^3.14.3",
     "pg": "^8.16.3",
     "write-file-atomic": "^6.0.0"
-  }
+  },
+  "peerDependenciesMeta": {
+    "better-sqlite3": {
+      "optional": true
+    },
+    "mongoose": {
+      "optional": true
+    },
+    "mysql2": {
+      "optional": true
+    },
+    "pg": {
+      "optional": true
+    },
+    "write-file-atomic": {
+      "optional": true
+    },
+    "cassandra-driver": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "lodash": "4.17.21"
+  },
+  "exports": {
+    ".": {
+      "default": "./out/index.js",
+      "types": "./out/index.d.js"
+    },
+    "./*": {
+      "default": "./out/driver/*.js",
+      "types": "./out/driver/*.d.ts"
+    }
+  },
+  "lint-staged": {
+    "*.{ts}": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZenKho-chill/zk.quick.db.git"
+  },
+  "keywords": [
+    "database",
+    "storing",
+    "values",
+    "easy",
+    "quick",
+    "sqlite",
+    "sqlite3",
+    "db"
+  ],
+  "author": "ZenKho",
+  "bugs": {
+    "url": "https://github.com/ZenKho-chill/zk.quick.db/issues"
+  },
+  "homepage": "https://zenkho.top"
 }
