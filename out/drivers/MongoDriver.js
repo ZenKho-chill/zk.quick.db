@@ -47,6 +47,11 @@ class MongoDriver {
   }
   async prepare(table) {
     this.checkConnection();
+    
+    if (!table || typeof table !== 'string' || table.trim().length === 0) {
+      throw new Error('Collection name cannot be empty or invalid');
+    }
+    
     if (!this.models.has(table))
       this.models.set(table, this.modelSchema(table));
   }
@@ -62,11 +67,11 @@ class MongoDriver {
       value: row.data,
     }));
   }
-  async getRowBykey(table, key) {
+  async getRowByKey(table, key) {
     this.checkConnection();
     const model = await this.getModel(table);
     const res = await model.findOne({ ID: key });
-    return res ? [res.daa, true] : [null, false];
+    return res ? [res.data, true] : [null, false];
   }
   async getStartsWith(table, query) {
     this.checkConnection();
@@ -84,12 +89,39 @@ class MongoDriver {
   async setRowByKey(table, key, value, _update) {
     this.checkConnection();
     const model = await this.getModel(table);
+    
+    // For MongoDB, we want to preserve Date objects and not convert undefined to null
+    // Only remove undefined at the top level, preserve Date objects
+    const cleanValue = this.cleanValue(value);
+    
     await model?.findOneAndUpdate({
       ID: key,
     }, {
-      $set: { data: value },
+      $set: { data: cleanValue },
     }, { upsert: true });
     return value;
+  }
+
+  cleanValue(obj) {
+    if (obj instanceof Date) {
+      return obj; // Preserve Date objects
+    }
+    
+    if (Array.isArray(obj)) {
+      return obj.map(item => this.cleanValue(item));
+    }
+    
+    if (obj && typeof obj === 'object') {
+      const cleaned = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (value !== undefined) { // Remove undefined fields
+          cleaned[key] = this.cleanValue(value);
+        }
+      }
+      return cleaned;
+    }
+    
+    return obj;
   }
   async deleteAllRows(table) {
     this.checkConnection();

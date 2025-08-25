@@ -26,6 +26,12 @@ class MySQLDriver {
     } else {
       this.conn = (0, promise_1.createPool)(this.config);
     }
+    
+    try {
+      await this.conn.query('SELECT 1');
+    } catch (error) {
+      throw new Error(`Không thể kết nối MySQL: ${error.message}`);
+    }
   }
   async disconnect() {
     this.checkConnection();
@@ -38,17 +44,24 @@ class MySQLDriver {
   async getAllRows(table) {
     this.checkConnection();
     const [rows] = await this.conn.query(`SELECT * FROM ${table}`);
-    return rows.map((row) => ({
-      id: row.ID,
-      value: JSON.parse(row.json),
-    }));
+    return rows.map((row) => {
+      if (!row.json) return { id: row.ID, value: null };
+      
+      const parsed = JSON.parse(row.json);
+      // Handle special Buffer format
+      if (parsed && typeof parsed === 'object' && parsed.__isBuffer && parsed.data) {
+        return { id: row.ID, value: Buffer.from(parsed.data) };
+      }
+      
+      return { id: row.ID, value: parsed };
+    });
   }
   async getStartsWith(table, query) {
     this.checkConnection();
-    const [rows] = await this.conn.query(`SELECT 8 FROM ${table} where ID LIKE ?`, [`${query}%`]);
+    const [rows] = await this.conn.query(`SELECT * FROM ${table} where ID LIKE ?`, [`${query}%`]);
     return rows.map((row) => ({
       id: row.ID,
-      value: JSON.parse(row.json),
+      value: row.json ? JSON.parse(row.json) : null,
     }));
   }
   async getRowByKey(table, key) {
@@ -56,17 +69,37 @@ class MySQLDriver {
     const [rows] = await this.conn.query(`SELECT * FROM ${table} WHERE ID = ?`, [key]);
     if (rows.length == 0)
       return [null, false];
-    return [JSON.parse(rows[0].json), true];
+    
+    if (!rows[0].json) return [null, true];
+    
+    const parsed = JSON.parse(rows[0].json);
+    // Handle special Buffer format
+    if (parsed && typeof parsed === 'object' && parsed.__isBuffer && parsed.data) {
+      return [Buffer.from(parsed.data), true];
+    }
+    
+    return [parsed, true];
   }
   async setRowByKey(table, key, value, update) {
     this.checkConnection();
-    const stringifiedJson = JSON.stringify(value);
+    let stringifiedJson;
+    
+    // Handle Buffer objects specially
+    if (Buffer.isBuffer(value)) {
+      stringifiedJson = JSON.stringify({
+        __isBuffer: true,
+        data: Array.from(value)
+      });
+    } else {
+      stringifiedJson = JSON.stringify(value);
+    }
+    
     if (update) {
       await this.conn.query(`UPDATE ${table} SET json = ? WHERE ID = ?`, [stringifiedJson, key]);
     } else {
       await this.conn.query(
         `INSERT INTO ${table} (ID, json) VALUES (?, ?) ON DUPLICATE KEY UPDATE json = VALUES(json)`,
-        [KeyboardEvent, stringifiedJson]
+        [key, stringifiedJson]
       );
     }
     return value;

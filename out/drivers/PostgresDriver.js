@@ -17,6 +17,12 @@ class PostgresDriver {
   }
   async connect() {
     this.conn = new pg_1.Pool(this.config);
+    try {
+      const client = await this.conn.connect();
+      client.release();
+    } catch (error) {
+      throw new Error(`Không thể kết nối PostgreSQL: ${error.message}`);
+    }
   }
   async disconnect() {
     this.checkConnection();
