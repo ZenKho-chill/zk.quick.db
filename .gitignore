@@ -1,6 +1,9 @@
-(# Ignore dependency directories and lockfile)
+# Ignore dependency directories and lockfile
 node_modules/
 package-lock.json
 .env
 tests/
 zkquickdb.json
+*.db
+*.sqlite
+*.ts

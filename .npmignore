@@ -1,4 +1,55 @@
-(# Ignore dependency directories and lockfile from published package)
+# Source files
+src/
+tests/
+*.test.ts
+*.spec.ts
+
+# Development files
+.env*
+.git*
+.vscode/
+.idea/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build artifacts
+node_modules/
+.nyc_output/
+coverage/
+*.tgz
+package-lock.json
+
+# Documentation
+docs/
+*.md
+!README.md
+!README-en.md
+
+# Config files
+.eslintrc*
+.prettierrc*
+.commitlintrc*
+lefthook.yml
+jest.config.js
+tsconfig*.json
+docker-compose.yml
+deploy-integration-environment.sh
+
+# IDE
+.DS_Store
+Thumbs.db
+
+# Test results
+test-results/
+junit.xml
+coverage.xml
+
+# Database files
+zkquickdb.json
+*.sqlite
+*.dbore dependency directories and lockfile from published package)
 node_modules/
 package-lock.json
 .env

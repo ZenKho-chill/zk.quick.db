@@ -9,7 +9,7 @@ const better_sqlite3_1 = __importDefault(require('better-sqlite3'));
 class SqliteDriver {
   static instance = null;
   _database;
-  get _database() {
+  get database() {
     return this._database;
   }
   constructor(path) {
@@ -36,9 +36,9 @@ class SqliteDriver {
     return data;
   }
   async getRowByKey(table, key) {
-    const value = (await this._database)
+    const value = (await this._database
       .prepare(`SELECT json FROM ${table} WHERE ID = @key`)
-      .get({ key });
+      .get({ key }));
     return value != null ? [JSON.parse(value.json), true] : [null, false];
   }
   async getStartsWith(table, query) {
@@ -72,7 +72,7 @@ class SqliteDriver {
   async deleteRowByKey(table, key) {
     const result = this._database
       .prepare(`DELETE FROM ${table} WHERE ID=@key`)
-      .run ({ key });
+      .run({ key });
     return result.changes;
   }
 }

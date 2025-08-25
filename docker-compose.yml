@@ -47,6 +47,7 @@ services:
       HEAP_NEWSIZE: 100M
     volumes:
       - ./tests/cassandra.yaml:/etc/cassandra/cassandra.yaml
+      - ./tests/cassandra-rackdc.properties:/etc/cassandra/cassandra-rackdc.properties
 
 networks:
   testing-network:

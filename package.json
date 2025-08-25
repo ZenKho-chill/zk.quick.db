@@ -1,12 +1,40 @@
 {
   "name": "zk.quick.db",
-  "version": "1.0.0",
-  "description": "Thư viện database đơn giản hỗ trợ SQLite, PostgreSQL, MySQL, MongoDB, Cassandra với API thống nhất",
+  "version": "7.0.0",
+  "description": "Thư viện trừu tượng hóa cơ sở dữ liệu mạnh mẽ, thống nhất và an toàn kiểu cho Node.js, hỗ trợ nhiều driver cơ sở dữ liệu với API nhất quán",
   "main": "out/index.js",
   "types": "out/index.d.ts",
   "engines": {
     "node": ">=14.0.0"
   },
+  "keywords": [
+    "database",
+    "db",
+    "sqlite",
+    "mysql",
+    "postgresql",
+    "mongodb",
+    "cassandra",
+    "json",
+    "memory",
+    "typescript",
+    "orm",
+    "quick-db",
+    "unified-api",
+    "multi-database"
+  ],
+  "author": {
+    "name": "ZenKho-chill",
+    "url": "https://github.com/ZenKho-chill"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZenKho-chill/zk.quick.db.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ZenKho-chill/zk.quick.db/issues"
+  },
+  "homepage": "https://github.com/ZenKho-chill/zk.quick.db#readme",
   "scripts": {
     "test:all": "node tests/run-tests.js all",
     "test:integration": "node tests/run-tests.js integration",
@@ -23,7 +51,7 @@
     "clean": "rm -rf ./out",
     "prepare": "npm run build"
   },
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-angular": "19.8.1",
@@ -40,6 +68,8 @@
     "eslint-config-prettier": "10.1.8",
     "git-cliff": "2.10.0",
     "jest": "30.0.5",
+    "jest-html-reporters": "^3.1.7",
+    "jest-junit": "^16.0.0",
     "lefthook": "1.12.3",
     "prettier": "3.6.2",
     "ts-jest": "29.4.1",
@@ -90,24 +120,5 @@
   },
   "lint-staged": {
     "*.{ts}": "eslint"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ZenKho-chill/zk.quick.db.git"
-  },
-  "keywords": [
-    "database",
-    "storing",
-    "values",
-    "easy",
-    "quick",
-    "sqlite",
-    "sqlite3",
-    "db"
-  ],
-  "author": "ZenKho",
-  "bugs": {
-    "url": "https://github.com/ZenKho-chill/zk.quick.db/issues"
-  },
-  "homepage": "https://zenkho.top"
+  }
 }

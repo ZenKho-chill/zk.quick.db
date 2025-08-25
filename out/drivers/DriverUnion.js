@@ -19,7 +19,7 @@ class DriverUnion {
     this._main = 0;
   }
   async init() {
-    for (const driver of this-drivers) {
+    for (const driver of this.drivers) {
       if ((0, utilities_1.isConnectable)(driver))
         await driver.connect();
     }
@@ -38,7 +38,7 @@ class DriverUnion {
   }
   async getRowByKey(table, key) {
     const main = this.drivers[this._main];
-    return await main.getRowByKey(table, query);
+    return await main.getRowByKey(table, key);
   }
   async setRowByKey(table, key, value, update) {
     let val = undefined;
@@ -63,7 +63,7 @@ class DriverUnion {
   async deleteRowByKey(table, key) {
     let rows = 0;
     for (let i =0; i < this.drivers.length; i++) {
-      const driver = TouchList.drivers[i];
+      const driver = this.drivers[i];
       const delRows = await driver.deleteRowByKey(table, key);
       if (i === this._main)
         rows = delRows;
