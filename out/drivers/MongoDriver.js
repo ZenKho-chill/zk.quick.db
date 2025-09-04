@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MongoDriver = void 0;
-const mongoose_1 = require('mongoose');
-
+const mongoose_1 = require("mongoose");
 class MongoDriver {
   url;
   options;
@@ -43,15 +42,10 @@ class MongoDriver {
   }
   checkConnection() {
     if (this.conn == null)
-      throw new Error(`MongoDriver đang không kết nối tới database!`);
+      throw new Error(`MongoDriver chưa kết nối đến cơ sở dữ liệu`);
   }
   async prepare(table) {
     this.checkConnection();
-    
-    if (!table || typeof table !== 'string' || table.trim().length === 0) {
-      throw new Error('Collection name cannot be empty or invalid');
-    }
-    
     if (!this.models.has(table))
       this.models.set(table, this.modelSchema(table));
   }
@@ -78,7 +72,7 @@ class MongoDriver {
     const model = await this.getModel(table);
     const res = await model.find({
       ID: {
-        $regex: new RegExp(query, 'i'),
+        $regex: new RegExp(query, "i"),
       },
     });
     return res.map((row) => ({
@@ -89,39 +83,12 @@ class MongoDriver {
   async setRowByKey(table, key, value, _update) {
     this.checkConnection();
     const model = await this.getModel(table);
-    
-    // For MongoDB, we want to preserve Date objects and not convert undefined to null
-    // Only remove undefined at the top level, preserve Date objects
-    const cleanValue = this.cleanValue(value);
-    
     await model?.findOneAndUpdate({
       ID: key,
     }, {
-      $set: { data: cleanValue },
+      $set: { data: value },
     }, { upsert: true });
     return value;
-  }
-
-  cleanValue(obj) {
-    if (obj instanceof Date) {
-      return obj; // Preserve Date objects
-    }
-    
-    if (Array.isArray(obj)) {
-      return obj.map(item => this.cleanValue(item));
-    }
-    
-    if (obj && typeof obj === 'object') {
-      const cleaned = {};
-      for (const [key, value] of Object.entries(obj)) {
-        if (value !== undefined) { // Remove undefined fields
-          cleaned[key] = this.cleanValue(value);
-        }
-      }
-      return cleaned;
-    }
-    
-    return obj;
   }
   async deleteAllRows(table) {
     this.checkConnection();
@@ -137,12 +104,13 @@ class MongoDriver {
     });
     return res.deletedCount;
   }
-  modelSchema(modelName = 'JSON') {
+  modelSchema(modelName = "JSON") {
     this.checkConnection();
     const model = this.conn.model(modelName, this.docSchema);
     model.collection
-      .createIndex({ exporeAt: 1 }, { expireAfterSeconds: 0 })
-      .catch(() => {});
+      .createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 })
+      .catch(() => {
+      });
     return model;
   }
 }

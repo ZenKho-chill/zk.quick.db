@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MemoryDriver = void 0;
-
 class MemoryDriver {
   store = new Map();
   async prepare(table) {

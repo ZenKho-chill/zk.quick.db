@@ -21,12 +21,6 @@ coverage/
 *.tgz
 package-lock.json
 
-# Documentation
-docs/
-*.md
-!README.md
-!README-en.md
-
 # Config files
 .eslintrc*
 .prettierrc*
@@ -55,3 +49,4 @@ package-lock.json
 .env
 tests/
 zkquickdb.json
+.github/

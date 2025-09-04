@@ -1,52 +1,54 @@
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
-  return (mod && mod.__esModule) ? mod: { "default": mod };
+  return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JSONDriver = void 0;
-const fs_1 = require('fs');
-const promises_1 = require('fs/promises');
-const write_file_atomic_1 = __importDefault(require('write-file-atomic'));
+const fs_1 = require("fs");
+const promises_1 = require("fs/promises");
+const write_file_atomic_1 = __importDefault(require("write-file-atomic"));
 const MemoryDriver_1 = require("./MemoryDriver");
-
 class JSONDriver extends MemoryDriver_1.MemoryDriver {
   path;
-  constructor(path = './zkquickdb.json') {
+  constructor(path = "./zkquickdb.json") {
     super();
     this.path = path;
     this.loadContentSync();
   }
   loadContentSync() {
     if ((0, fs_1.existsSync)(this.path)) {
-      const contents = (0, fs_1.readFileSync)(this.path, { encoding: 'utf-8' });
+      const contents = (0, fs_1.readFileSync)(this.path, { encoding: "utf-8" });
       try {
         const data = JSON.parse(contents);
         for (const table in data) {
           const store = this.getOrCreateTable(table);
           data[table].forEach((d) => store.set(d.id, d.value));
         }
-      } catch {
-        throw new Error('Lỗi database');
       }
-    } else {
-      write_file_atomic_1.default.sync(this.path, '{}');
+      catch {
+        throw new Error("Cơ sở dữ liệu bị hỏng");
+      }
+    }
+    else {
+      write_file_atomic_1.default.sync(this.path, "{}");
     }
   }
   async loadContent() {
     if ((0, fs_1.existsSync)(this.path)) {
-      const contents = await (0, promises_1.readFile)(this.path, { encoding: 'utf-8' });
+      const contents = await (0, promises_1.readFile)(this.path, { encoding: "utf-8" });
       try {
         const data = JSON.parse(contents);
         for (const table in data) {
           const store = this.getOrCreateTable(table);
           data[table].forEach((d) => store.set(d.id, d.value));
         }
-      } catch {
-        throw new Error('Lỗi database');
       }
-    } else {
-      await (0, write_file_atomic_1.default)(this.path, '{}');
+      catch {
+        throw new Error("Cơ sở dữ liệu bị hỏng");
+      }
+    }
+    else {
+      await (0, write_file_atomic_1.default)(this.path, "{}");
     }
   }
   async export() {

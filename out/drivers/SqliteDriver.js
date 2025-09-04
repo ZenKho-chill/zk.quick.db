@@ -4,8 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SqliteDriver = void 0;
-const better_sqlite3_1 = __importDefault(require('better-sqlite3'));
-
+const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
 class SqliteDriver {
   static instance = null;
   _database;
@@ -58,9 +57,10 @@ class SqliteDriver {
       this._database
         .prepare(`UPDATE ${table} SET json = (?) WHERE ID = (?)`)
         .run(stringifiedJson, key);
-    } else {
+    }
+    else {
       this._database
-        .prepare(`INSERT INTO ${table} (Id, json) VALUES (?, ?)`)
+        .prepare(`INSERT INTO ${table} (ID,json) VALUES (?,?)`)
         .run(key, stringifiedJson);
     }
     return value;

@@ -1,6 +1,5 @@
 import { IRemoteDriver } from "../interfaces/IRemoteDriver";
 import { ClientOptions } from "cassandra-driver";
-
 export declare class CassandraDriver implements IRemoteDriver {
   private static instance;
   private _client;

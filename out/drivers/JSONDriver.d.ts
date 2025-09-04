@@ -1,12 +1,10 @@
 import { MemoryDriver } from "./MemoryDriver";
-
 export type DataLike<T = any> = {
   id: string;
   value: T;
 };
-
 export declare class JSONDriver extends MemoryDriver {
-  path = string;
+  path: string;
   constructor(path?: string);
   loadContentSync(): void;
   loadContent(): Promise<void>;
@@ -14,5 +12,10 @@ export declare class JSONDriver extends MemoryDriver {
   snapshot(): Promise<void>;
   deleteAllRows(table: string): Promise<number>;
   deleteRowByKey(table: string, key: string): Promise<number>;
-  setRowByKey<T>(table: string, key: string, value: any, update: boolean): Promise<T>;
+  setRowByKey<T>(
+    table: string,
+    key: string,
+    value: any,
+    update: boolean
+  ): Promise<T>;
 }

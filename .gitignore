@@ -7,3 +7,4 @@ zkquickdb.json
 *.db
 *.sqlite
 *.ts
+.github/

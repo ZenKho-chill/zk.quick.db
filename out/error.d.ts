@@ -6,7 +6,6 @@ export declare enum ErrorKind {
   InvalidType = "INVALID_TYPE",
   InstanceNotFound = "INSTANCE_NOT_FOUND",
 }
-
 export declare class CustomError extends Error {
   message: string;
   kind: ErrorKind;

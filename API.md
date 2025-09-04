@@ -40,7 +40,7 @@ await db.close();
 
 | Method | Description | Returns |
 |--------|-------------|---------|
-| `set(key, value, update?)` | Set value for key | `Promise<T>` |
+| `set(key, value)` | Set value for key | `Promise<T>` |
 | `get(key)` | Get value by key | `Promise<T \| null>` |
 | `has(key)` | Check if key exists | `Promise<boolean>` |
 | `delete(key)` | Delete key | `Promise<number>` |
@@ -66,7 +66,7 @@ await db.close();
 | Method | Description | Returns |
 |--------|-------------|---------|
 | `push(key, ...values)` | Add to end of array | `Promise<T[]>` |
-| `unshift(key, ...values)` | Add to beginning of array | `Promise<T[]>` |
+| `unshift(key, value)` | Add to beginning of array | `Promise<T[]>` |
 | `pop(key)` | Remove from end of array | `Promise<T \| undefined>` |
 | `shift(key)` | Remove from beginning of array | `Promise<T \| undefined>` |
 | `pull(key, value, once?)` | Remove value from array | `Promise<T[]>` |
@@ -83,7 +83,7 @@ await db.close();
 |--------|-------------|---------|
 | `init()` | Initialize connection | `Promise<void>` |
 | `close()` | Close connection | `Promise<void>` |
-| `isReady` | Connection status | `boolean` |
+| `useNormalKeys(activate)` | Enable/disable normal keys mode | `void` |
 
 ## Singleton Pattern
 
@@ -114,6 +114,17 @@ interface QuickDBOptions<D extends DatabaseDriver> {
   driver?: D;              // Database driver
   normalKeys?: boolean;     // Default: false
 }
+```
+
+## Normal Keys Mode
+
+When enabled, disables automatic dot notation parsing:
+
+```typescript
+const db = new QuickDB({ normalKeys: true });
+await db.set('user.name', 'John'); // Stored as literal key 'user.name'
+
+db.useNormalKeys(true); // Enable at runtime
 ```
 
 ## Error Handling

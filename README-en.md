@@ -52,7 +52,7 @@ npm install cassandra-driver
 ```typescript
 import { QuickDB } from 'zk.quick.db';
 
-// Create database instance (defaults to JSON driver)
+// Create database instance (defaults to SQLite driver)
 const db = new QuickDB();
 
 // Initialize connection
@@ -297,6 +297,22 @@ await usersTable.set('john', { name: 'John', age: 30 });
 await postsTable.set('post1', { title: 'Hello World' });
 ```
 
+### Connection Management
+
+#### `init(): Promise<void>`
+Initialize connection.
+
+```typescript
+await db.init();
+```
+
+#### `close(): Promise<void>`
+Close connection.
+
+```typescript
+await db.close();
+```
+
 ### Singleton Pattern
 
 #### `registerSingleton(name: string, options?: QuickDBOptions): QuickDB`
@@ -313,6 +329,22 @@ Get existing singleton instance.
 
 ```typescript
 const db = QuickDB.getSingleton('main-db');
+```
+
+#### `getSingleton(name: string): QuickDB`
+Get existing singleton instance.
+
+```typescript
+const db = QuickDB.getSingleton('main-db');
+```
+
+### Configuration Options
+
+#### `useNormalKeys(activate: boolean): void`
+Enable/disable normal keys mode.
+
+```typescript
+db.useNormalKeys(true); // Disable dot notation parsing
 ```
 
 ## 🔗 Driver Union

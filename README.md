@@ -54,7 +54,7 @@ npm install cassandra-driver
 ```typescript
 import { QuickDB } from 'zk.quick.db';
 
-// Tạo instance database (mặc định dùng JSON driver)
+// Tạo instance database (mặc định dùng SQLite driver)
 const db = new QuickDB();
 
 // Khởi tạo kết nối
@@ -299,6 +299,22 @@ await usersTable.set('john', { name: 'John', age: 30 });
 await postsTable.set('post1', { title: 'Hello World' });
 ```
 
+### Quản Lý Kết Nối
+
+#### `init(): Promise<void>`
+Khởi tạo kết nối.
+
+```typescript
+await db.init();
+```
+
+#### `close(): Promise<void>`
+Đóng kết nối.
+
+```typescript
+await db.close();
+```
+
 ### Singleton Pattern
 
 #### `registerSingleton(name: string, options?: QuickDBOptions): QuickDB`
@@ -315,6 +331,22 @@ Lấy instance singleton hiện có.
 
 ```typescript
 const db = QuickDB.getSingleton('main-db');
+```
+
+#### `getSingleton(name: string): QuickDB`
+Lấy instance singleton hiện có.
+
+```typescript
+const db = QuickDB.getSingleton('main-db');
+```
+
+### Tùy Chọn Cấu Hình
+
+#### `useNormalKeys(activate: boolean): void`
+Bật/tắt chế độ normal keys.
+
+```typescript
+db.useNormalKeys(true); // Tắt dot notation parsing
 ```
 
 ## 🔗 Driver Union

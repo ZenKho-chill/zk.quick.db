@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MySQLDriver = void 0;
-const promise_1 = require('mysql2/promise');
-
+const promise_1 = require("mysql2/promise");
 class MySQLDriver {
   static instance;
   conn;
@@ -17,20 +16,15 @@ class MySQLDriver {
   }
   checkConnection() {
     if (!this.conn) {
-      throw new Error(`MySQLDriver đang không kết nối tới database!`);
+      throw new Error("MySQL chưa kết nối đến cơ sở dữ liệu");
     }
   }
   async connect() {
-    if (typeof this.config === 'string') {
-      this.conn = (0, promise_1.createPool)(this.config);
-    } else {
+    if (typeof this.config == "string") {
       this.conn = (0, promise_1.createPool)(this.config);
     }
-    
-    try {
-      await this.conn.query('SELECT 1');
-    } catch (error) {
-      throw new Error(`Không thể kết nối MySQL: ${error.message}`);
+    else {
+      this.conn = (0, promise_1.createPool)(this.config);
     }
   }
   async disconnect() {
@@ -44,56 +38,29 @@ class MySQLDriver {
   async getAllRows(table) {
     this.checkConnection();
     const [rows] = await this.conn.query(`SELECT * FROM ${table}`);
-    return rows.map((row) => {
-      if (!row.json) return { id: row.ID, value: null };
-      
-      const parsed = JSON.parse(row.json);
-      // Handle special Buffer format
-      if (parsed && typeof parsed === 'object' && parsed.__isBuffer && parsed.data) {
-        return { id: row.ID, value: Buffer.from(parsed.data) };
-      }
-      
-      return { id: row.ID, value: parsed };
-    });
+    return rows.map((row) => ({
+      id: row.ID,
+      value: JSON.parse(row.json),
+    }));
   }
   async getStartsWith(table, query) {
     this.checkConnection();
     const [rows] = await this.conn.query(`SELECT * FROM ${table} where ID LIKE ?`, [`${query}%`]);
     return rows.map((row) => ({
       id: row.ID,
-      value: row.json ? JSON.parse(row.json) : null,
+      value: JSON.parse(row.json),
     }));
   }
   async getRowByKey(table, key) {
     this.checkConnection();
-    const [rows] = await this.conn.query(`SELECT * FROM ${table} WHERE ID = ?`, [key]);
+    const [rows] = await this.conn.query(`SELECT json FROM ${table} WHERE ID = ?`, [key]);
     if (rows.length == 0)
       return [null, false];
-    
-    if (!rows[0].json) return [null, true];
-    
-    const parsed = JSON.parse(rows[0].json);
-    // Handle special Buffer format
-    if (parsed && typeof parsed === 'object' && parsed.__isBuffer && parsed.data) {
-      return [Buffer.from(parsed.data), true];
-    }
-    
-    return [parsed, true];
+    return [JSON.parse(rows[0].json), true];
   }
   async setRowByKey(table, key, value, update) {
     this.checkConnection();
-    let stringifiedJson;
-    
-    // Handle Buffer objects specially
-    if (Buffer.isBuffer(value)) {
-      stringifiedJson = JSON.stringify({
-        __isBuffer: true,
-        data: Array.from(value)
-      });
-    } else {
-      stringifiedJson = JSON.stringify(value);
-    }
-    
+    const stringifiedJson = JSON.stringify(value);
     if (update) {
       await this.conn.query(`UPDATE ${table} SET json = ? WHERE ID = ?`, [stringifiedJson, key]);
     } else {
@@ -111,7 +78,7 @@ class MySQLDriver {
   }
   async deleteRowByKey(table, key) {
     this.checkConnection();
-    const [rows] = await this.conn.query(`DELETE FROM ${table} WHERE ID = ?`, [key]);
+    const [rows] = await this.conn.query(`DELETE FROM ${table} WHERE ID=?`, [key]);
     return rows.affectedRows;
   }
 }
