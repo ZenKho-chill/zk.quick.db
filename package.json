@@ -1,6 +1,6 @@
 {
   "name": "zk.quick.db",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "description": "Thư viện trừu tượng hóa cơ sở dữ liệu mạnh mẽ, thống nhất và an toàn kiểu cho Node.js, hỗ trợ nhiều driver cơ sở dữ liệu với API nhất quán",
   "main": "out/index.js",
   "types": "out/index.d.ts",
@@ -111,11 +111,11 @@
   "exports": {
     ".": {
       "default": "./out/index.js",
-      "types": "./out/index.d.js"
+      "types": "./out/index.d.ts"
     },
     "./*": {
-      "default": "./out/driver/*.js",
-      "types": "./out/driver/*.d.ts"
+      "default": "./out/drivers/*.js",
+      "types": "./out/drivers/*.d.ts"
     }
   },
   "lint-staged": {
