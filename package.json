@@ -1,6 +1,6 @@
 {
   "name": "zk.quick.db",
-  "version": "9.0.0",
+  "version": "9.1.0",
   "description": "Thư viện trừu tượng hóa cơ sở dữ liệu mạnh mẽ, thống nhất và an toàn kiểu cho Node.js, hỗ trợ nhiều driver cơ sở dữ liệu với API nhất quán",
   "main": "out/index.js",
   "types": "out/index.d.ts",
@@ -76,7 +76,8 @@
     "typedoc": "0.28.10",
     "typescript": "5.9.2"
   },
-  "peerDependencies": {
+  "dependencies": {
+    "lodash": "4.17.21",
     "better-sqlite3": "^12.2.0",
     "cassandra-driver": "^4.8.0",
     "fs": "^0.0.1-security",
@@ -84,29 +85,6 @@
     "mysql2": "^3.14.3",
     "pg": "^8.16.3",
     "write-file-atomic": "^6.0.0"
-  },
-  "peerDependenciesMeta": {
-    "better-sqlite3": {
-      "optional": true
-    },
-    "mongoose": {
-      "optional": true
-    },
-    "mysql2": {
-      "optional": true
-    },
-    "pg": {
-      "optional": true
-    },
-    "write-file-atomic": {
-      "optional": true
-    },
-    "cassandra-driver": {
-      "optional": true
-    }
-  },
-  "dependencies": {
-    "lodash": "4.17.21"
   },
   "exports": {
     ".": {
